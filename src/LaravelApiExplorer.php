@@ -3,9 +3,9 @@
 namespace NetoJose\LaravelApiExplorer;
 
 use Route;
-use ReflectionClass;
 use ReflectionParameter;
 use ReflectionMethod;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class LaravelApiExplorer
@@ -64,7 +64,10 @@ class LaravelApiExplorer
     {
         $filtered = [];
 
-        $match = trim(config('laravelapiexplorer.match'), '/');
+        $match = array_map(
+			fn($pattern) => trim($pattern, '/'),
+			Arr::wrap(config('laravelapiexplorer.match'))
+		);
         $ignoreList = collect(config('laravelapiexplorer.ignore'));
         $ignoreList->push('laravelapiexplorer.view');
         $ignoreList->push('laravelapiexplorer.info');
